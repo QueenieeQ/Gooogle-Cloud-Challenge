@@ -139,5 +139,17 @@ kubectl create -f wp-deployment.yaml
 kubectl create -f wp-service.yaml
 ```
 
+> Using UI for both task so no code in here
+### TASK 8: Enable monitoring
 
+> Navigation Menu -> Kubernetes Engine -> Services and Ingress -> Copy Endpoint's address.
+
+> Navigation Menu -> Monitoring -> Uptime Checks -> + CREATE UPTIME CHECK Title : Wordpress Uptime 
+// Next -> Target Hostname : {Endpoint's address} (without http...) Path : / // Next -> Next -> Create
+
+### TASK 9: Provide access for an additional engineer
+
+
+
+>// Navigation Menu -> IAM & Admin -> IAM -> ADD New Member : {Username 2 from Lab instruction page} Role : Project -> Editor
 
