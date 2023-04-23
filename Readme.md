@@ -1,6 +1,8 @@
 
 ## Set Up and Configure a Cloud Environment in Google Cloud: Challenge Lab # GSP321 ##
 
+> Remember set project id and zone before do anything
+
  
 ###  TASK 1: Create development VPC manually 
 
@@ -48,3 +50,55 @@ gcloud compute firewall-rules create fw-ssh-dev --source-ranges=0.0.0.0/0 --targ
 ```
 gcloud compute firewall-rules create fw-ssh-prod --source-ranges=0.0.0.0/0 --target-tags ssh --allow=tcp:22 --network=griffin-prod-vpc
 ```
+
+### TASK 4: Create and configure Cloud SQL Instance
+
+```
+gcloud sql instances create griffin-dev-db --root-password password --region=us-east1
+```
+
+```
+gcloud sql connect griffin-dev-db
+```
+> Remember username and password you created for later
+
+> Enter mysql
+
+```
+CREATE DATABASE wordpress;
+```
+```
+GRANT ALL PRIVILEGES ON wordpress.* TO "wp_user"@"%"
+ IDENTIFIED BY "stormwind_rules";
+ ```
+ ```
+FLUSH PRIVILEGES;
+```
+```
+exit
+```
+
+###  TASK 5: Create Kubernetes cluster
+
+```
+gcloud container clusters create griffin-dev \
+ --network griffin-dev-vpc \
+ --subnetwork griffin-dev-wp \
+ --machine-type n1-standard-4 \
+ --num-nodes 2 \
+ --zone us-east1-b
+```
+> this step take you about 5-8 minutes. Be patience
+
+```
+gcloud container clusters get-credentials griffin-dev --zone us-east1-b
+```
+
+```
+cd ~/
+
+gsutil cp -r gs://cloud-training/gsp321/wp-k8s .
+```
+
+
+
