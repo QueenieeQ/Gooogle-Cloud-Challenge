@@ -94,10 +94,49 @@ gcloud container clusters create griffin-dev \
 gcloud container clusters get-credentials griffin-dev --zone us-east1-b
 ```
 
-```
-cd ~/
 
+### TASK 6, 7
+
+```
 gsutil cp -r gs://cloud-training/gsp321/wp-k8s .
+```
+ ```
+cd wp-k8s
+```
+
+> change your username and password you created in step 4
+
+```
+sed -i s/username_goes_here/wp_user/g wp-env.yaml
+```
+```
+sed -i s/password_goes_here/stormwind_rules/g wp-env.yaml
+```
+
+
+```
+kubectl create -f wp-env.yaml
+```
+```
+gcloud iam service-accounts keys create key.json --iam-account=cloud-sql-proxy@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
+```
+```
+kubectl create secret generic cloudsql-instance-credentials --from-file key.json
+```
+
+
+```
+I=$(gcloud sql instances describe griffin-dev-db --format="value(connectionName)")
+```
+
+```
+sed -i s/YOUR_SQL_INSTANCE/$I/g wp-deployment.yaml
+```
+```
+kubectl create -f wp-deployment.yaml
+```
+```
+kubectl create -f wp-service.yaml
 ```
 
 
