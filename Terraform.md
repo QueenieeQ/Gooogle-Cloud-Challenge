@@ -237,3 +237,79 @@ Run the following commands to apply the changes. Type _yes_ at the prompt.
 ```
 terraform apply
 ```
+<br/> **TASK 5: Use a module from the Registry** <br/>
+Copy and paste the following to the end of _main.tf_ file, fill in _Version Number_ and _Network Name_ instructed in the challenge:
+```
+module "vpc" {
+    source  = "terraform-google-modules/network/google"
+    version = "~> <FILL IN VERSION NUMBER>"
+
+    project_id   = "qwiklabs-gcp-04-f2c1c01a09d3"
+    network_name = "<FILL IN NETWORK NAME>"
+    routing_mode = "GLOBAL"
+
+    subnets = [
+        {
+            subnet_name           = "subnet-01"
+            subnet_ip             = "10.10.10.0/24"
+            subnet_region         = "us-central1"
+        },
+        {
+            subnet_name           = "subnet-02"
+            subnet_ip             = "10.10.20.0/24"
+            subnet_region         = "us-central1"
+            subnet_private_access = "true"
+            subnet_flow_logs      = "true"
+            description           = "This subnet has a description"
+        }
+    ]
+}
+```
+Run the following commands to initialize the module and create the VPC. Type _yes_ at the prompt.
+```
+terraform init
+terraform apply
+```
+Navigate to _modules/instances/instances.tf_. Replace the entire contents of the file with the following:
+```
+resource "google_compute_instance" "tf-instance-1" {
+  name         = "tf-instance-1"
+  machine_type = "n1-standard-2"
+  zone         = "us-central1-a"
+  allow_stopping_for_update = true
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-10"
+    }
+  }
+
+  network_interface {
+ network = "<FILL IN NETWORK NAME>"
+    subnetwork = "subnet-01"
+  }
+}
+
+resource "google_compute_instance" "tf-instance-2" {
+  name         = "tf-instance-2"
+  machine_type = "n1-standard-2"
+  zone         = "us-central1-a"
+  allow_stopping_for_update = true
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-10"
+    }
+  }
+
+  network_interface {
+ network = "<FILL IN NETWORK NAME>"
+    subnetwork = "subnet-02"
+  }
+}
+```
+Run the following commands to initialize the module and update the instances. Type _yes_ at the prompt.
+```
+terraform init
+terraform apply
+```
