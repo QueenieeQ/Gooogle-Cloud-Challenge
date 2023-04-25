@@ -141,3 +141,99 @@ The two instances have now been imported into your terraform configuration. You 
 terraform plan
 terraform apply
 ```
+
+
+<br/> **TASK 3: Modify and update infrastructure** <br/>
+Navigate to _modules/instances/instance.tf_. Replace the entire contents of the file with the following, and fill in your _Instance 3 ID_:
+```
+resource "google_compute_instance" "tf-instance-1" {
+  name         = "tf-instance-1"
+  machine_type = "n1-standard-2"
+  zone         = "us-east1-a"
+  allow_stopping_for_update = true
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-10"
+    }
+  }
+
+  network_interface {
+ network = "default"
+  }
+}
+
+resource "google_compute_instance" "tf-instance-2" {
+  name         = "tf-instance-2"
+  machine_type = "n1-standard-2"
+  zone         = "us-east1-a"
+  allow_stopping_for_update = true
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-10"
+    }
+  }
+
+  network_interface {
+ network = "default"
+  }
+}
+
+resource "google_compute_instance" "<FILL IN INSTANCE 3 NAME>" {
+  name         = "<FILL IN INSTANCE 3 NAME>"
+  machine_type = "n1-standard-2"
+  zone         = "us-east1-a"
+  allow_stopping_for_update = true
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-10"
+    }
+  }
+
+  network_interface {
+ network = "default"
+  }
+}
+```
+Run the following commands to initialize the module and create/update the instance resources. Type _yes_ at the dialogue after you run the apply command to accept the state changes.
+
+```
+terraform init
+terraform apply
+```
+
+<br/> **TASK 4: Taint and destroy resources** <br/>
+Taint the _tf-instance-3_ resource by running the following command, and fill in your _Instance 3 ID_:
+```
+terraform taint module.instances.google_compute_instance.<FILL IN INSTANCE 3 NAME>
+```
+Run the following commands to apply the changes:
+```
+terraform init
+terraform apply
+```
+Remove the _tf-instance-3_ resource from the _instances.tf_ file. Delete the following code chunk from the file.
+```
+resource "google_compute_instance" "<FILL IN INSTANCE 3 NAME>" {
+  name         = "<FILL IN INSTANCE 3 NAME>"
+  machine_type = "n1-standard-2"
+  zone         = "us-east1-a"
+  allow_stopping_for_update = true
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-10"
+    }
+  }
+
+  network_interface {
+ network = "default"
+  }
+}
+```
+Run the following commands to apply the changes. Type _yes_ at the prompt.
+```
+terraform apply
+```
