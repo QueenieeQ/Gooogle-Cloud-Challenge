@@ -313,3 +313,25 @@ Run the following commands to initialize the module and update the instances. Ty
 terraform init
 terraform apply
 ```
+
+<br/> **TASK 6: Configure a firewall** <br/>
+Add the following resource to the _main.tf_ file, fill in the _GCP Project ID_ and _Network Name_:
+```
+resource "google_compute_firewall" "tf-firewall" {
+  name    = "tf-firewall"
+ network = "projects/<FILL IN PROJECT_ID>/global/networks/<FILL IN NETWORK NAME>"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+
+  source_tags = ["web"]
+  source_ranges = ["0.0.0.0/0"]
+}
+```
+Run the following commands to configure the firewall. Type _yes_ at the prompt.
+```
+terraform init
+terraform apply
+```
