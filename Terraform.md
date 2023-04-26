@@ -238,7 +238,7 @@ Run the following commands to apply the changes. Type _yes_ at the prompt.
 terraform apply
 ```
 <br/> **TASK 5: Use a module from the Registry** <br/>
-Copy and paste the following to the end of _main.tf_ file, fill in _Version Number_ and _Network Name_ instructed in the challenge:
+Copy and paste the following to the end of _main.tf_ file, fill in _Version Number_ and _Network Name_ instructed in the challenge :
 ```
 module "vpc" {
     source  = "terraform-google-modules/network/google"
